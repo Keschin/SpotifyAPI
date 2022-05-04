@@ -3,6 +3,8 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sb
+import img2pdf
+from PIL import Image
 import spotipy
 import spotipy as util
 from spotipy.oauth2 import SpotifyOAuth
@@ -91,6 +93,16 @@ for song in range (50):
         ax.text(v + 0.2, i + .16, str(v), color='black', fontweight='light', fontsize=14)
 
     plt.savefig('top50_songs_per_artist.jpg', bbox_inches="tight")
+
+    img_path = r"C:\Users\kevin\PycharmProjects\SpotifyAPI\top50_songs_per_artist.jpg"
+    pdf_path = r"C:\Users\kevin\PycharmProjects\SpotifyAPI\Image.pdf"
+    image = Image.open(img_path)
+    pdf_bytes = img2pdf.convert(image.filename)
+    file = open(pdf_path, "wb")
+    file.write(pdf_bytes)
+    image.close()
+    file.close()
+    print("Erfolgreich PDF-Datei erstellt")
 
 
 
