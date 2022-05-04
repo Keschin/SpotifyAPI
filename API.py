@@ -27,6 +27,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, client_id = client_I
 
 # Hier werden die TopTracks gesucht mit bestimmten Parametern. Limit wird auf 50 gesetzt für die Top 50
 results = sp.current_user_top_tracks(limit=50, offset=0, time_range='medium_term')
+# Jeder Track wird in eine Liste gepackt bzw angehängt (Append) Danach wird diese Liste mittels Json-Datei geöffnet
 for song in range (50):
     list = []
     list.append(results)
@@ -42,6 +43,7 @@ for song in range (50):
         list_of_albums = []
         list_of_popularity = []
 
+# Hier werden die Daten noch in ein CSV gespeichert
         for result in list_of_results:
             result["album"]
             this_artists_name = result["artists"][0]["name"]
@@ -72,6 +74,7 @@ for song in range (50):
              })
         all_songs_saved = all_songs.to_csv('top50_songs.csv')
 
+#Hier werden die Daten aus der Json-Datei in eine Text-Datei umgespeichert.
     filename = 'top50_data.json'
     with open(filename, 'r') as fr:
         pre_ = fr.read()
@@ -81,6 +84,7 @@ for song in range (50):
             fw.write('\n'.join(lines))
     jsonfile = 'top50_data.json'
 
+#Hier werden die Daten aus den Listen in ein Bild umgewandelt beziehungsweise als Grafik geordnet und angezeigt
     descending_order = all_songs['artist'].value_counts().sort_values(ascending=False).index
     ax = sb.countplot(y=all_songs['artist'], order=descending_order)
 
@@ -100,6 +104,8 @@ for song in range (50):
 
     plt.savefig('top50_songs_per_artist.jpg', bbox_inches="tight")
 
+
+# Mit Angaben zum Bild und dem bestehender PDF-Datei, wird das Bild zu einer PDF-Datei umgewandelt
     img_path = r"C:\Users\kevin\PycharmProjects\SpotifyAPI\top50_songs_per_artist.jpg"
     pdf_path = r"C:\Users\kevin\PycharmProjects\SpotifyAPI\Image.pdf"
     image = Image.open(img_path)
@@ -110,6 +116,8 @@ for song in range (50):
     file.close()
     print("Erfolgreich PDF-Datei erstellt")
 
+# Für das E-Mail senden werden zuerst die Angaben gegeben. Account Daten zum Verschicken und die E-Mail Adresse
+    # An die das Bild geschickt wird
     sender = "kayala766@gmail.com"
     password = "Info2matiker5"
     receiver = "kevinayala@gmx.ch"
