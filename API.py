@@ -73,5 +73,24 @@ for song in range (50):
             fw.write('\n'.join(lines))
     jsonfile = 'top50_data.json'
 
+    descending_order = all_songs['artist'].value_counts().sort_values(ascending=False).index
+    ax = sb.countplot(y=all_songs['artist'], order=descending_order)
+
+    sb.despine(fig=None, ax=None, top=True, right=True, left=False, trim=False)
+    sb.set(rc={'figure.figsize': (6, 7.2)})
+
+    ax.set_ylabel('')
+    ax.set_xlabel('')
+    ax.set_title('Songs per Artist in Top 50', fontsize=16, fontweight='heavy')
+    sb.set(font_scale=1.4)
+    ax.axes.get_xaxis().set_visible(False)
+    ax.set_frame_on(False)
+
+    y = all_songs['artist'].value_counts()
+    for i, v in enumerate(y):
+        ax.text(v + 0.2, i + .16, str(v), color='black', fontweight='light', fontsize=14)
+
+    plt.savefig('top50_songs_per_artist.jpg', bbox_inches="tight")
+
 
 
