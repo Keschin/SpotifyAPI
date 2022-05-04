@@ -7,8 +7,14 @@ import img2pdf
 from PIL import Image
 import spotipy
 import spotipy as util
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy.oauth2 import SpotifyClientCredentials
+
 
 # Hier werden die Rechte und persönliche ID's vergeben
 client_ID = 'ba90c35f938e41b293136e6e325c699d'
@@ -103,6 +109,46 @@ for song in range (50):
     image.close()
     file.close()
     print("Erfolgreich PDF-Datei erstellt")
+
+    sender = "kayala766@gmail.com"
+    password = "Info2matiker5"
+    receiver = "kevinayala@gmx.ch"
+    body = 'Endlich hat es funktioniert!'
+    message = MIMEMultipart()
+    message['From'] = sender
+    message['To'] = receiver
+    message['Subject'] = 'This email has an attachment, a pdf file'
+
+    message.attach(MIMEText(body, 'plain'))
+
+    pdfname = 'Image.pdf'
+    binary_pdf = open(pdfname, 'rb')
+
+    payload = MIMEBase('application', 'octate-stream', Name=pdfname)
+    # payload = MIMEBase('application', 'pdf', Name=pdfname)
+    payload.set_payload((binary_pdf).read())
+
+    # enconding the binary into base64
+    encoders.encode_base64(payload)
+
+    # add header with pdf name
+    payload.add_header('Content-Decomposition', 'attachment', filename=pdfname)
+    message.attach(payload)
+
+    # use gmail with port
+    session = smtplib.SMTP('smtp.gmail.com', 587)
+
+    # enable security
+    session.starttls()
+
+    # login with mail_id and password
+    session.login(sender, password)
+
+    text = message.as_string()
+    session.sendmail(sender, receiver, text)
+    session.quit()
+    print('Mail Sent');
+    break;
 
 
 
